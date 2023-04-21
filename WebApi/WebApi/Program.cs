@@ -1,3 +1,6 @@
+using Infrastructure;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -13,6 +16,11 @@ policy =>
     policy.WithOrigins("http://localhost:4200", "http://localhost:4200/",
     "https://localhost:4200").AllowAnyMethod().AllowAnyHeader();
 }));
+// Add the database context for Entity Framework Core
+builder.Services.AddDbContext<DatabaseContext>(options =>
+{
+    options.UseSqlServer(ConnectionStrings.ConnString);
+});
 
 var app = builder.Build();
 
