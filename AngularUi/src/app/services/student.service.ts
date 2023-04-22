@@ -12,7 +12,18 @@ export class StudentService {
 
   public getStudents(): Observable<Student[]> {
     return this.http.get<Student[]>('https://localhost:7249/api/Student');
+  }
 
+  public addStudent(student: Student): Observable<Student[]> {
+    return this.http.post<Student[]>('https://localhost:7249/api/Student', student);
+  }
+
+  public updateStudent(student: Student): Observable<Student[]> {
+    return this.http.put<Student[]>('https://localhost:7249/api/Student', student);
+  }
+
+  public deleteStudent(student: Student): Observable<Student[]> {
+    return this.http.delete<Student[]>('https://localhost:7249/api/Student/' + student.id);
   }
   
 }

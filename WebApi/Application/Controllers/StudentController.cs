@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Domain.Students;
+using Infrastructure;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApi.Controllers
 {
@@ -8,14 +10,59 @@ namespace WebApi.Controllers
     [ApiController]
     public class StudentController : ControllerBase
     {
+        private readonly DatabaseContext database;
+
+        public StudentController(DatabaseContext db) { database = db; }
 
         [HttpGet]
         public async Task<ActionResult<List<Student>>> GetStudents()
         {
-        return new List<Student>
-            {
-                new Student("1", "John", "Doe", "123-456-7890", "jdoe@gmail.com")
-            };
+        return Ok(await database.Students.ToListAsync());
         }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Student>> GetStudent(string id)
+        {
+        return Ok(await database.Students.FindAsync(id));
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<List<Student>>> PostStudent(Student student)
+        {
+        database.Students.Add(student);
+        await database.SaveChangesAsync();
+        return Ok(await database.Students.ToListAsync());
+        }
+
+        [HttpPut]
+        public async Task<ActionResult<List<Student>>> PutStudent(Student updatedStudent)
+        {
+        var student = await database.Students.FindAsync(updatedStudent.Id);
+        if (student == null)
+        {
+        return BadRequest("The student is not in the database.");
+        }
+        student.FirstName = updatedStudent.FirstName;
+        student.LastName = updatedStudent.LastName;
+        student.ContactNumber = updatedStudent.ContactNumber;
+        student.EmailAddress = updatedStudent.EmailAddress;
+        await database.SaveChangesAsync();
+        return Ok(await database.Students.ToListAsync());
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<List<Student>>> DeleteStudent(string id)
+        {
+        var student = await database.Students.FindAsync(id);
+        if (student == null)
+        {
+        return BadRequest("The student is not in the database.");
+        }
+        database.Students.Remove(student);
+        await database.SaveChangesAsync();
+        return Ok(await database.Students.ToListAsync());
+
+        }
+
     }
 }

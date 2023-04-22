@@ -13,6 +13,7 @@ namespace Infrastructure
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options) { }
 
         public DbSet<Student> Students { get; set; }
+
         //public DbSet<Student> Students => Set<Student>();
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -22,5 +23,6 @@ namespace Infrastructure
         optionsBuilder.UseSqlServer(ConnectionStrings.ConnString);
         }
         }
+
     }
 }
