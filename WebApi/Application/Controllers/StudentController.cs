@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using Domain.Students;
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using FluentValidation;
+using FluentValidation.Results;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace WebApi.Controllers
 {
@@ -27,8 +30,21 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<List<Student>>> PostStudent(Student student)
+        public async Task<ActionResult<List<Student>>> PostStudent(Student student, [FromServices] IValidator<Student> validator)
+        //public async Task<ActionResult<List<Student>>> PostStudent(Student student)
         {
+        ValidationResult validationResult = validator.Validate(student);
+
+        if (!validationResult.IsValid)
+        {
+        var modelStateDictionary = new ModelStateDictionary();
+        foreach (var error in validationResult.Errors)
+        {
+        modelStateDictionary.AddModelError(error.PropertyName, error.ErrorMessage);
+        }
+        return ValidationProblem(modelStateDictionary);
+        }
+
         database.Students.Add(student);
         await database.SaveChangesAsync();
         return Ok(await database.Students.ToListAsync());

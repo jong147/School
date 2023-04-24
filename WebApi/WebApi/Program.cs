@@ -1,5 +1,10 @@
+using FluentValidation;
+using Domain.Students;
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Domain.Validations;
+using Domain;
+using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +26,12 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
 {
     options.UseSqlServer(ConnectionStrings.ConnString);
 });
+
+// Add the Fluent Validation service
+//builder.Services.AddScoped<IValidator<Student>, CreateStudentRequestValidator>();
+//builder.Services.AddFluentValidation();
+//builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
+builder.Services.AddValidatorsFromAssemblyContaining<IAssemblyMarker>();
 
 var app = builder.Build();
 

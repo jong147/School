@@ -30,7 +30,5 @@ namespace Domain.Students
             return $"{Id} {FirstName} {LastName} {ContactNumber} {EmailAddress}";
         }
 
-
-
     }
 }

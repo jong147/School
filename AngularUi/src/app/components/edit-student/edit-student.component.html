@@ -1,33 +1,76 @@
 <div *ngIf="student">
-    <h2>{{ student!.firstName + " " + student!.lastName }}</h2>
-    <div>
-        <label>Student ID: </label>
-        <input [(ngModel)]="student!.id" placeholder="{{ student.id || 'SCH0000' }}"/>       
-    </div>
-    <div>
-        <label>First Name: </label>
-        <input [(ngModel)]="student!.firstName" placeholder="{{ student.firstName || 'First name' }}"/>
-    </div>
-    <div>
-        <label>Last Name: </label>
-        <input [(ngModel)]="student!.lastName" placeholder="{{ student.firstName || 'Last name' }}"/>
-    </div>
-    <div>
-        <label>Contact Number: </label>
-        <input [(ngModel)]="student!.contactNumber" placeholder="{{ student.firstName || 'Phone number' }}"/>
-    </div>
-    <div>
-        <label>Email Address: </label>
-        <input [(ngModel)]="student!.emailAddress" placeholder="{{ student.firstName || 'Email address' }}"/>
-    </div>
-    <button (click)="addStudent(student)">Add</button>
-    <button (click)="updateStudent(student)">Update</button>
-    <button (click)="deleteStudent(student)">Delete</button>
+  <h2>{{ student!.firstName + " " + student!.lastName }}</h2>
+  <div>
+    <label>Student ID: </label>
+    <input [(ngModel)]="student!.id" placeholder="{{ student.id || 'SCH0000' }}"
+      (keyup)="validateStudent(student.id, student.firstName, student.lastName, student.contactNumber, student.emailAddress)" />
+    <br>
+    <label *ngIf="formErrors.id" style="color:red;">{{formErrors.id}}</label>
+  </div>
+  <div>
+    <label>First Name: </label>
+    <input [(ngModel)]="student!.firstName" placeholder="{{ student.firstName || 'First name' }}"
+      (keyup)="validateStudent(student.id, student.firstName, student.lastName, student.contactNumber, student.emailAddress)" />
+    <br>
+    <label *ngIf="formErrors.firstname" style="color:red;">{{formErrors.firstname}}</label>
+  </div>
+  <div>
+    <label>Last Name: </label>
+    <input [(ngModel)]="student!.lastName" placeholder="{{ student.lastName || 'Last name' }}"
+      (keyup)="validateStudent(student.id, student.firstName, student.lastName, student.contactNumber, student.emailAddress)" />
+    <br>
+    <label *ngIf="formErrors.lastname" style="color:red;">{{formErrors.lastname}}</label>
+  </div>
+  <div>
+    <label>Contact Number: </label>
+    <input [(ngModel)]="student!.contactNumber" placeholder="{{ student.contactNumber || 'Phone number' }}"
+      (keyup)="validateStudent(student.id, student.firstName, student.lastName, student.contactNumber, student.emailAddress)" />
+    <br>
+    <label *ngIf="formErrors.contactnumber" style="color:red;">{{formErrors.contactnumber}}</label>
+  </div>
+  <div>
+    <label>Email Address: </label>
+    <input [(ngModel)]="student!.emailAddress" placeholder="{{ student.emailAddress || 'Email address' }}"
+      (keyup)="validateStudent(student.id, student.firstName, student.lastName, student.contactNumber, student.emailAddress)" />
+    <br>
+    <label *ngIf="formErrors.emailaddress" style="color:red;">{{formErrors.emailaddress}}</label>
+  </div>
+  <button (click)="addStudent(student)" [disabled]="!hasErrors(formErrors)">Add</button>
+  <button (click)="updateStudent(student)" [disabled]="!hasErrors(formErrors)">Update</button>
+  <button (click)="deleteStudent(student)">Delete</button>
+  <!-- <button (click)="validateStudent(student.id, student.firstName, student.lastName, student.contactNumber, student.emailAddress)">Validate</button> -->
 
-<!--     <button (click)="addStudent(student)" *ngIf="!student.id">Add</button>
+  <!--     <button (click)="addStudent(student)" *ngIf="!student.id">Add</button>
     <button (click)="updateStudent(student)" *ngIf="student.id">Update</button>
     <button (click)="deleteStudent(student)" *ngIf="student.id">Delete</button> -->
 </div>
+
+<!-- <form
+  class="needs-validation"
+  novalidate
+  [formGroup]="studentForm"
+  (ngSubmit)="saveForm(studentForm)"
+>
+  <div class="row">
+    <div class="form-group col-sm-4">
+      <label>
+        Phone
+        <input
+          type="text"
+          class="form-control"
+          formControlName="phone"
+          [class.is-invalid]="(studentForm.get('phone')!.touched || studentForm.get('phone')!.dirty) && studentForm.get('phone')!.invalid"
+        >
+      </label>
+      <span
+        class="invalid-feedback"
+        *ngIf="(studentForm.get('phone')!.touched || studentForm.get('phone')!.dirty) && studentForm.get('phone')!.invalid"
+      >
+        Phone number must be 10 digits
+      </span> 
+    </div>
+  </div> 
+</form> -->
 
 
 <!-- add input fields for the student's firstName, lastName, contactNumber and emailAddress -->
