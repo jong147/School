@@ -1,10 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Domain.Students;
+﻿using Domain.Students;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure
 {
@@ -13,8 +8,6 @@ namespace Infrastructure
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options) { }
 
         public DbSet<Student> Students { get; set; }
-
-        //public DbSet<Student> Students => Set<Student>();
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

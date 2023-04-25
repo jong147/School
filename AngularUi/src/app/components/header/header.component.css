@@ -1,0 +1,29 @@
+a.nav-link.font-weight-light {
+    font-family: Oswald;
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    background-clip: text;
+    color: white;
+    text-shadow: rgba(255, 255, 255, 0.5) 0px 3px 3px;
+}
+
+a.nav-link.font-weight-light:hover {
+    color: rgb(176, 226, 250) !important;
+}
+
+a.navbar-brand:hover {
+    color: rgb(176, 226, 250) !important;
+}
+
+a {
+    color: white;
+}
+
+a,
+a:hover,
+a:focus,
+a:active {
+    text-decoration: none;
+}

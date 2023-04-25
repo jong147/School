@@ -1,10 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Student } from 'src/app/models/student';
 import { StudentService } from 'src/app/services/student.service';
-import { AsyncValidator, Validator } from 'fluentvalidation-ts'
-import { AbstractControl, FormBuilder, FormGroup, FormControl, Validators, ValidationErrors } from '@angular/forms';
+import { FormBuilder, FormGroup, ValidationErrors } from '@angular/forms';
 import { StudentValidator } from 'src/app/validators/student-validator';
-
 
 @Component({
   selector: 'app-edit-student',
@@ -23,10 +21,6 @@ export class EditStudentComponent implements OnInit {
     'contactnumber': '',
     'emailaddress': ''
   };
-
-  //bind validator function to firstName input field on value change
-
-  // firstNameControl? = new FormControl('', this.validateStudent('','','','',''));
 
   @Input() student?: Student;
   @Output() studentsUpdated: EventEmitter<Student[]> = new EventEmitter<Student[]>();
@@ -62,11 +56,9 @@ export class EditStudentComponent implements OnInit {
 
   validateStudent(Id: Student["id"], FirstName: Student["firstName"], LastName: Student["lastName"], ContactNumber: Student["contactNumber"], EmailAddress: Student["emailAddress"]): ValidationErrors | null {
     var resultPromise = ValidateStudentFunction(this.validator, Id, FirstName, LastName, ContactNumber, EmailAddress);
+    var resultErrors: ValidationErrors | null = resultPromise;
 
-    var resultVar: ValidationErrors | null = resultPromise;
-    console.log(resultVar);
-
-    if (resultVar != null || resultVar != undefined) {
+    if (resultErrors != null || resultErrors != undefined) {
       resultPromise.then((result) => {
           this.formErrors.id = result!['id'] || '';
           this.formErrors.firstname = result!['firstName'] || '';
@@ -81,9 +73,7 @@ export class EditStudentComponent implements OnInit {
       this.formErrors.contactnumber = '';
       this.formErrors.emailaddress = '';
     }
-
-    console.log(this.formErrors);
-    return resultVar;
+    return resultErrors;
   }
 
   hasErrors(obj: any): boolean {

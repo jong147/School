@@ -1,11 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Domain.Students;
-using Infrastructure;
-using Microsoft.EntityFrameworkCore;
+﻿using Domain.Students;
 using FluentValidation;
 using FluentValidation.Results;
+using Infrastructure;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApi.Controllers
 {
@@ -31,10 +30,8 @@ namespace WebApi.Controllers
 
         [HttpPost]
         public async Task<ActionResult<List<Student>>> PostStudent(Student student, [FromServices] IValidator<Student> validator)
-        //public async Task<ActionResult<List<Student>>> PostStudent(Student student)
         {
         ValidationResult validationResult = validator.Validate(student);
-
         if (!validationResult.IsValid)
         {
         var modelStateDictionary = new ModelStateDictionary();
@@ -51,13 +48,25 @@ namespace WebApi.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<List<Student>>> PutStudent(Student updatedStudent)
+        public async Task<ActionResult<List<Student>>> PutStudent(Student updatedStudent, [FromServices] IValidator<Student> validator)
         {
         var student = await database.Students.FindAsync(updatedStudent.Id);
         if (student == null)
         {
         return BadRequest("The student is not in the database.");
         }
+
+        ValidationResult validationResult = validator.Validate(student);
+        if (!validationResult.IsValid)
+        {
+        var modelStateDictionary = new ModelStateDictionary();
+        foreach (var error in validationResult.Errors)
+        {
+        modelStateDictionary.AddModelError(error.PropertyName, error.ErrorMessage);
+        }
+        return ValidationProblem(modelStateDictionary);
+        }
+
         student.FirstName = updatedStudent.FirstName;
         student.LastName = updatedStudent.LastName;
         student.ContactNumber = updatedStudent.ContactNumber;

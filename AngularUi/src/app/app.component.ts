@@ -10,15 +10,23 @@ import { StudentService } from './services/student.service';
 export class AppComponent implements OnInit {
   title = 'AngularUi';
   students: Student[] = [];
-  studentToEdit? : Student;
+  studentToEdit?: Student;
+  dtOptions: DataTables.Settings = {};
 
   constructor(private studentService: StudentService) {
   }
 
   ngOnInit(): void {
     this.studentService
-    .getStudents()
-    .subscribe((students: Student[]) => (this.students = students));
+      .getStudents()
+      .subscribe((students: Student[]) => (this.students = students));
+
+    this.dtOptions = {
+      pagingType: 'full_numbers',
+      pageLength: 5,
+      processing: true,
+      lengthMenu: [5, 10, 25, 50, 100]
+    };
   }
 
   updateStudentList(students: Student[]) {
@@ -31,6 +39,12 @@ export class AppComponent implements OnInit {
 
   editStudent(student: Student) {
     this.studentToEdit = student;
+  }
+
+  deleteStudent(student: Student) {
+    this.studentService
+      .deleteStudent(student)
+      .subscribe((students: Student[]) => (this.students = students));
   }
 
 }

@@ -7,8 +7,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class StudentService {
-  
-  constructor(private http: HttpClient) {}
+
+  constructor(private http: HttpClient) { }
 
   public getStudents(): Observable<Student[]> {
     return this.http.get<Student[]>('https://localhost:7249/api/Student');
@@ -25,5 +25,5 @@ export class StudentService {
   public deleteStudent(student: Student): Observable<Student[]> {
     return this.http.delete<Student[]>('https://localhost:7249/api/Student/' + student.id);
   }
-  
+
 }
